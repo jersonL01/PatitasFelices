@@ -6,3 +6,5 @@ django-rest-framework
 requests
 django-paypal
 paypal-checkout-serversdk
+pymysql
+mysqlclient
