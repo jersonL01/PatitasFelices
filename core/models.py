@@ -1,4 +1,6 @@
 from django.db import models
+from django.utils import timezone
+from django.contrib.auth.models import User
 
 # Create your models here.
 
@@ -7,6 +9,7 @@ class TipoProducto(models.Model):
 
     def __str__(self):
         return self.descripcion
+
 
 class Producto(models.Model):
     nombre = models.CharField(max_length=100)
@@ -20,3 +23,21 @@ class Producto(models.Model):
 
     def __str__(self):
         return self.nombre
+
+class Usuario(models.Model):
+    nombre = models.CharField(max_length=100)
+    apellido = models.CharField(max_length=100)
+    correo = models.CharField(max_length=100)
+    telefono = models.IntegerField(max_length=100)
+    telefono = models.CharField(max_length=100)
+
+
+
+
+class Cart(models.Model):
+    producto = models.ForeignKey(Producto, on_delete=models.CASCADE)
+    cantidad = models.PositiveIntegerField()
+    usuario = models.ForeignKey(User, on_delete=models.CASCADE)
+    foto = models.ImageField(null=True, blank=True)
+    fecha_compra = models.DateTimeField(default=timezone.now)
+

@@ -1,0 +1,50 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block css %}
+<link rel="stylesheet" href="{% static 'core/css/register.css' %}">
+{% endblock %}
+{% block contenido %}
+
+
+
+<form action="" method="POST">
+    {% csrf_token %}
+    {{ form | crispy }}
+    <div class="form">
+        <h1>Registrarse</h1>
+        <div class="grupo">
+            <input type="text" name="" id="name" required><span class="barra"></span>
+            <label for="">Nombre</label>
+        </div>
+        <div class="grupo">
+            <input type="text" name="" id="name" required><span class="barra"></span>
+            <label for="">Apellido</label>
+        </div>
+        <div class="grupo">
+            <input type="text" name="" id="email" required><span class="barra"></span>
+            <label for="">correo</label>
+        </div>
+        <div class="grupo">
+            <input type="text" name="" id=telefono" required><span class="barra"></span>
+            <label for="">Telefono</label>
+        </div>
+        <div class="grupo">
+            <input type="password" name="" id="password" required><span class="barra"></span>
+            <label for="n">Contraseña</label>
+        </div>
+
+
+        <p class="acepto">Estoy de acuerdo con <a href="#">Terminos y condiciones</a></p>
+ 
+        <button type="submit"><a class="boton" href="">Crear cuenta</a></button>
+        <p class="register"><a class="cuenta" href="{% url 'login' %}">¿Ya tengo cuenta?</a></p>
+    </div>
+</form>
+{% endblock %}
+
+
+{% block js %}
+
+{% endblock %}
+ 

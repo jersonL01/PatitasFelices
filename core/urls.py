@@ -20,13 +20,49 @@ urlpatterns = [
     path('checkout/', checkout, name="checkout" ),
     path('contact/', contact, name="contact" ),
     path('productsingle/', productsingle, name="productsingle" ),
-    path('shop/', shop, name="shop" ),
+    path('shopAdmin/', shopAdmin, name="shopAdmin" ),
     path('shopApi/', shopApi, name="shopApi" ),
+    path('register/', register, name="register" ),
+    path('seguimiento/', seguimiento, name="seguimiento"),
+    path('shop/', shop, name="shop"),
 
-    
+
+
     # CRUD
 
     path('agregarproductos/', agregarproductos, name="agregarproductos" ),
     path('actualizarproductos/<id>/', actualizarproductos, name="actualizarproductos" ),
     path('eliminar/<id>/', eliminar, name="eliminar" ),
+
+
+
+
+
+    
+    # CARRITO
+
+    path('eliminar/<id>/', eliminar_producto, name="Del"),
+    path('restar/<id>/', restar_producto, name="Sub"),
+    path('limpiar/', limpiar_carrito, name="CLS"),
+    path('agregar/<id>/', agregaralcarrito, name="Add"),
+    path('comprar_producto/<id>/', comprar_producto, name='comprar_producto'),
+    path('devolvercarrito/', devolvercarrito, name="devolvercarrito"),
+    path('agregaralcarrito/<id>/', agregaralcarrito, name="agregaralcarrito"),
+    path('eliminarcarrito/<id>/', eliminarcarrito, name="eliminarcarrito"),
+
+
+
+
+
+
+
+
+
+
+
+
+
 ]
+
+
+
