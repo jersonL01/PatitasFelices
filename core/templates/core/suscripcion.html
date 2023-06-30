@@ -1,0 +1,85 @@
+
+{% extends 'core/base.html' %}
+{% load static %}
+{% block css %}
+<link rel="stylesheet" href="{% static 'core/css/suscripcion.css' %}">
+{% endblock %}
+{% block contenido %}
+<section class="form-register">
+    <h4>Suscribirse</h4>
+    <input class="controls" type="text" name="nombre" id="nombre" placeholder="Ingrese su nombre">
+    <input class="controls" type="text" name="apellido" id="apellido" placeholder="Ingrese su apellido">
+    <input class="controls" type="text" name="email" id="email" placeholder="Ingrese su correo">
+    <p>La suscripcion es mensual, con un valor de $5 dolares, obtendras descuento del 5% en productos.</p>
+    <button class="controls" id="btnSuscripcion"><a href="#"></a></button>
+</section>
+
+{% endblock %}
+{% block js %}
+<script src="http://www.paypalobjects.com/api/checkout.js"></script>
+
+<script>
+	paypal.Button.render({
+		env: 'sandbox',
+		client: {
+			sandbox: 'AeTyLGm5wUyTDIaQiKNqwnt0GVpM6RDJnfOsmWv0k45BsH5KUeaWssRnJZViuBGKJqJQIMIt626Xk6Eh', //USAR ID DEL PROYECTO NUESTRO
+
+			production: 'demo_production_client_id'
+		},
+		locale: 'es_CL',
+		style: {
+			size: 'large', // small, medium, large
+			color: 'gold', // gold, black
+			shape: 'rect' // pill , rect
+		},
+		commit: true,
+		payment: function (data, actions) {
+			return actions.payment.create({
+				transactions: [{
+					amount: {
+						total: '1.00',
+						currency: 'USD'
+					}
+				}]
+			});
+		},
+		onAuthorize: function (data, actions) {
+			return actions.payment.execute().then(function () {
+				// LOGICA DESPUES DEL PAGO
+				Swal.fire({
+					title: 'Pago Exitoso',
+					text: 'Pago realizado correctamente!',
+					icon: 'success',
+					showCancelButton: false,
+					confirmButtonColor: '#3085d6',
+					cancelButtonColor: '#d33',
+					confirmButtonText: 'Aceptar'
+				});
+			})
+		},
+		onCancel(data) {
+			Swal.fire({
+				title: 'Pago Cancelado',
+				text: 'El pago ha sido cancelado!',
+				icon: 'error',
+				showCancelButton: false,
+				confirmButtonColor: '#3085d6',
+				cancelButtonColor: '#d33',
+				confirmButtonText: 'Aceptar'
+			});
+		},
+		onError(err) {
+			Swal.fire({
+				title: 'Error de pago',
+				text: 'Ha ocurrido un error con el pago!',
+				icon: 'error',
+				showCancelButton: false,
+				confirmButtonColor: '#3085d6',
+				cancelButtonColor: '#d33',
+				confirmButtonText: 'Aceptar'
+			});
+		}
+
+	}, '#btnSuscripcion');
+</script>
+{% endblock %}

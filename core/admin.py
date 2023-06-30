@@ -13,6 +13,9 @@ admin.site.register(TipoProducto)
 admin.site.register(Producto, ProductoAdmin)
 
 
+# cliente
+admin.site.register(TipoCliente)
+admin.site.register(Cliente)
 
 
  

@@ -6,118 +6,116 @@
 {% block contenido %}
 <div class="hero-wrap hero-bread" style="background-image: url('images/bg_6.jpg');">
 	<div class="container">
-	  <div class="row no-gutters slider-text align-items-center justify-content-center">
-		<div class="col-md-9 ftco-animate text-center">
-			<p class="breadcrumbs"><span class="mr-2"><a href="index.html">Inicio</a></span> <span>Carro</span></p>
-		  <h1 class="mb-0 bread">Mi Lista de deseos</h1>
+		<div class="row no-gutters slider-text align-items-center justify-content-center">
+			<div class="col-md-9 ftco-animate text-center">
+				<p class="breadcrumbs"><span class="mr-2"><a href="index.html">Inicio</a></span> <span>Carro</span></p>
+				<h1 class="mb-0 bread">Mi Lista de deseos</h1>
+			</div>
 		</div>
-	  </div>
 	</div>
-  </div>
+</div>
 
-  <section class="ftco-section ftco-cart">
-		  <div class="container">
-			  <div class="row">
-			  <div class="col-md-12 ftco-animate">
-				  <div class="cart-list">
-					  <table class="table">
-						  <thead class="thead-primary">
+<section class="ftco-section ftco-cart">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12 ftco-animate">
+				<div class="cart-list">
+					<table class="table">
+						<thead class="thead-primary">
 							<tr class="text-center">
-							  <th>&nbsp;</th>
-							  <th>&nbsp;</th>
-							  <th>Producto</th>
-							  <th>Precio</th>
-							  <th>Cantidad</th>
-							  <th>Total</th>
+								<th>&nbsp;</th>
+								<th>&nbsp;</th>
+								<th>Imagen</th>
+								<th>Producto</th>
+								<th>Cantidad</th>
+								<th>Precio CL</th>
+								<th>Total</th>
 							</tr>
-						  </thead>
-						  <tbody>
+						</thead>
+
+						{% for carrito in items_carrito %}
+						<tbody>
 							<tr class="text-center">
-							  <td class="product-remove"><a href="#"><span class="ion-ios-close"></span></a></td>
-							  
-							  <td class="image-prod"><div class="img" style="background-image:url(static/core/images/bandanasmascotas.png);"></div></td>
-							  
-							  <td class="product-name">
-								  <h3>Bandanas</h3>
-								  <p>Far far away, behind the word mountains, far from the countries</p>
-							  </td>
-							  
-							  <td class="price">$4.90</td>
-							  
-							  <td class="quantity">
-								  <div class="input-group mb-3">
-								   <input type="text" name="quantity" class="quantity form-control input-number" value="1" min="1" max="100">
-								</div>
-							</td>
-							  
-							  <td class="total">$4.90</td>
+								
+								<td class="product-remove"><a href="{% url 'Sub' carrito.producto_id %}"><span class="ion-ios-close"></span></a></td>
+								<td class="product-remove"><a href="{% url 'Add' carrito.producto_id %}"><span class="fa-solid fa-plus">+</span></a></td>
+								<td class="image-prod">
+									{% if carrito.producto.foto %}
+									<img src="{% static 'core/images/carrito.dfault' %}" class="img-fluid" width="100"
+										height="100">
+									{% else %}
+									<img src="{{ carrito.producto.foto.url }}" class="img-fluid" width="100"
+										height="100">
+									{% endif %}
+								</td>
+
+								<td class="product-name">
+									<h3>{{ carrito.producto.nombre }}</h3>
+									<p>{{ descripcion.}}</p>
+								</td>
+								<td class="quantity">
+									<div class="col">
+										<a href="#"
+											class="badge btn btn-dark badge-dark">	{{ carrito.cantidad }}</a>
+									</div>
+									
+								</td>
+
+								<td class="price">${{ carrito.producto.precio }}</td>
+
+							
+
+								<td class="total">${{ precio_total }}</td>
 							</tr><!-- END TR-->
+							{% endfor %}
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+		<div class="row justify-content-start">
+			<div class="col col-lg-5 col-md-6 mt-5 cart-wrap ftco-animate">
+				<div class="cart-total mb-3">
+					<h3>Total</h3>
+					<p class="d-flex">
+						<span>Subtotal</span>
+						<span>${{ precio_total }}</span>
+					</p>
+					<p class="d-flex">
+						<span>Delivery</span>
+						<span>$0.00</span>
+					</p>
+					<p class="d-flex">
+						<span>Descuento</span>
+						<span>$3.00</span>
+					</p>
+					<hr>
+					<p class="d-flex total-price">
+						<span>Total</span>
+						<span>${{ precio_total }}</span>
+					</p>
+				</div>
+				<p>
+				<div id="btnPaypal">Pagar</div>
+				</p>
+			</div>
 
-							<tr class="text-center">
-							  <td class="product-remove"><a href="#"><span class="ion-ios-close"></span></a></td>
-							  
-							  <td class="image-prod"><div class="img" style="background-image:url(static/core/images/juguete.jpg);"></div></td>
-							  
-							  <td class="product-name">
-								  <h3>juguete</h3>
-								  <p>Far far away, behind the word mountains, far from the countries</p>
-							  </td>
-							  
-							  <td class="price">$15.70</td>
-							  
-							  <td class="quantity">
-								  <div class="input-group mb-3">
-								   <input type="text" name="quantity" class="quantity form-control input-number" value="1" min="1" max="100">
-								</div>
-							</td>
-							  
-							  <td class="total">$15.70</td>
-							</tr><!-- END TR-->
-						  </tbody>
-						</table>
-					</div>
-			  </div>
-		  </div>
-		  <div class="row justify-content-start">
-			  <div class="col col-lg-5 col-md-6 mt-5 cart-wrap ftco-animate">
-				  <div class="cart-total mb-3">
-					  <h3>Total</h3>
-					  <p class="d-flex">
-						  <span>Subtotal</span>
-						  <span>$20.60</span>
-					  </p>
-					  <p class="d-flex">
-						  <span>Delivery</span>
-						  <span>$0.00</span>
-					  </p>
-					  <p class="d-flex">
-						  <span>Descuento</span>
-						  <span>$3.00</span>
-					  </p>
-					  <hr>
-					  <p class="d-flex total-price">
-						  <span>Total</span>
-						  <span>${{valor}}</span>
-					  </p>
-				  </div>
-				  <p><div id="btnPaypal">Pagar</div></p>
-			  </div>
 
-			
-		  </div>
-		  </div>
-		
-	  </section>
-	  
+		</div>
+	</div>
 
-  
+</section>
+
+
+
 
 
 {% endblock %}
 
 {% block js %}
-  <script src="http://www.paypalobjects.com/api/checkout.js"></script>
-  <script>
+
+<script src="http://www.paypalobjects.com/api/checkout.js"></script>
+<script>
 	paypal.Button.render({
 		env: 'sandbox',
 		client: {
@@ -132,19 +130,18 @@
 			shape: 'rect' // pill , rect
 		},
 		commit: true,
-		payment: function (data,actions) {
+		payment: function (data, actions) {
 			return actions.payment.create({
 				transactions: [{
 					amount: {
-						total: '{{valor}}',
+						total: '1.00',
 						currency: 'USD'
 					}
 				}]
 			});
 		},
 		onAuthorize: function (data, actions) {
-			return actions.payment.execute().then(function(){
-				// LOGICA DESPUES DEL PAGO
+			return actions.payment.execute().then(function () {
 				Swal.fire({
 					title: 'Pago Exitoso',
 					text: 'Pago realizado correctamente!',
@@ -153,6 +150,14 @@
 					confirmButtonColor: '#3085d6',
 					cancelButtonColor: '#d33',
 					confirmButtonText: 'Aceptar'
+
+
+				}).then((result) => {
+					if (result.isConfirmed) {
+						Swal.fire('Compra', ' realizada exitosamente', 'success').then(function () {
+							window.location.href = "/limpiar/";
+						})
+					}
 				});
 			})
 		},
@@ -178,12 +183,10 @@
 				confirmButtonText: 'Aceptar'
 			});
 		}
-		
-	}, '#btnPaypal');
-  </script>
 
-	
+	}, '#btnPaypal');
+</script>
+
 
 
 {% endblock %}
- 
