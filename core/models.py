@@ -24,13 +24,18 @@ class Producto(models.Model):
     def __str__(self):
         return self.nombre
 
-class Usuario(models.Model):
+class TipoCliente(models.Model):
+    tipo = models.CharField(max_length=50)
+
+class Cliente(models.Model):
+    rut = models.CharField(max_length=12)
     nombre = models.CharField(max_length=100)
     apellido = models.CharField(max_length=100)
     correo = models.CharField(max_length=100)
     telefono = models.IntegerField(max_length=100)
-    telefono = models.CharField(max_length=100)
-
+    direccion = models.IntegerField(max_length=100)
+    contraseña= models.CharField(max_length=100)
+    tipo = models.ForeignKey(TipoCliente, on_delete=models.CASCADE)
 
 
 

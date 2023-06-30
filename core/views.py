@@ -77,121 +77,6 @@ def cart(request):
     })"""
 
 
-@login_required
-def agregaralcarrito(request, id):
-    producto = Producto.objects.get(id=id)
-    
-    # Verificar si el stock es cero
-    if producto.stock == 0:
-        messages.error(request, 'Hay un producto agotado en tu carrito.')
-    else:
-        item_carrito, created = Cart.objects.get_or_create(
-            producto=producto,
-            usuario=request.user,
-            defaults={'cantidad': 1}
-        )
-        if not created:
-            item_carrito.cantidad += 1
-            item_carrito.save()
-        
-        # Restar la cantidad del producto al stock disponible
-        Producto.objects.filter(id=id).update(stock=F('stock') - 1)
-        
-    total_precio = Cart.objects.filter(usuario=request.user).aggregate(Sum('producto__precio'))
-    request.session['total_precio'] = total_precio.get('producto__precio__sum', 0)
-    
-    return redirect('cart')
-
-@login_required
-def comprar_producto(request, id):
-    producto = get_object_or_404(Producto, id=id)
-    
-    if producto.stock > 0:
-        producto.stock -= 1
-        producto.save()
-        
-    return redirect("cart")    
-
-@login_required
-def devolvercarrito(request):
-    items_carrito = Cart.objects.filter(usuario=request.user)
-    
-    # Devolver la cantidad de productos al stock disponible
-    for item in items_carrito:
-        Producto.objects.filter(id=item.producto.id).update(stock=F('stock') + item.cantidad)
-    
-    # Eliminar todos los productos del carrito
-    items_carrito.delete()
-    
-    return redirect('cart')
-
-@login_required
-def eliminarcarrito(request, id):
-    carrito = Cart(request)
-    producto = Producto.objects.get(id=id)
-    carrito.restar(producto)
-    return redirect("cart")
-
-
-
-@login_required
-def eliminar_producto(request, id):
-    producto = Producto.objects.get(id=id)
-    Cart.objects.filter(producto=producto, usuario=request.user).delete()
-    return redirect("cart")
-
-@login_required
-def agregaralcarrito(request, id):
-    producto = Producto.objects.get(id=id)
-    
-    # Verificar si el stock es cero
-    if producto.stock == 0:
-        messages.error(request, 'Hay un producto agotado en tu carrito.')
-    else:
-        item_carrito, created = Cart.objects.get_or_create(
-            producto=producto,
-            usuario=request.user,
-            defaults={'cantidad': 1}
-        )
-        if not created:
-            item_carrito.cantidad += 1
-            item_carrito.save()
-        
-        # Restar la cantidad del producto al stock disponible
-        Producto.objects.filter(id=id).update(stock=F('stock') - 1)
-        
-    total_precio = Cart.objects.filter(usuario=request.user).aggregate(Sum('producto__precio'))
-    request.session['total_precio'] = total_precio.get('producto__precio__sum', 0)
-    
-    return redirect('cart')
-
-@login_required
-def restar_producto(request, id):
-    item_carrito = Cart.objects.get(producto__id=id, usuario=request.user)
-    
-    if item_carrito.cantidad > 1:
-        item_carrito.cantidad -= 1
-        Producto.objects.filter(id=item_carrito.producto.id).update(stock=F('stock') + 1)
-        item_carrito.save()
-    else:
-        # Devolver la cantidad del producto al stock disponible
-        Producto.objects.filter(id=item_carrito.producto.id).update(stock=F('stock') + 1)
-        item_carrito.delete()
-
-    return redirect("cart")
-
-@login_required
-def limpiar_carrito(request):
-    Cart.objects.filter(usuario=request.user).delete()
-    request.session['total_precio'] = 0
-    return redirect("cart")
-
-
-
-
-
-
-
 def checkout(request):
     return render(request, 'core/checkout.html')
 
@@ -226,6 +111,8 @@ def register(request):
 def seguimiento(request):
     return render(request, 'core/seguimiento.html')
 
+def suscripcion(request):
+    return render(request, 'core/suscripcion.html')
 # SHOP API
 def shopApi(request):
     # REALIZAMOS LA SOLICITUD AL API
@@ -292,4 +179,113 @@ def eliminar(request, id):
     producto.eliminar()
 
     return redirect( to="shop")
+
+# CARRITO
+
+def agregaralcarrito(request, id):
+    producto = Producto.objects.get(id=id)
+    
+    # Verificar si el stock es cero
+    if producto.stock == 0:
+        messages.error(request, 'Hay un producto agotado en tu carrito.')
+    else:
+        item_carrito, created = Cart.objects.get_or_create(
+            producto=producto,
+            usuario=request.user,
+            defaults={'cantidad': 1}
+        )
+        if not created:
+            item_carrito.cantidad += 1
+            item_carrito.save()
+        
+        # Restar la cantidad del producto al stock disponible
+        Producto.objects.filter(id=id).update(stock=F('stock') - 1)
+        
+    total_precio = Cart.objects.filter(usuario=request.user).aggregate(Sum('producto__precio'))
+    request.session['total_precio'] = total_precio.get('producto__precio__sum', 0)
+    
+    return redirect('cart')
+
+def comprar_producto(request, id):
+    producto = get_object_or_404(Producto, id=id)
+    
+    if producto.stock > 0:
+        producto.stock -= 1
+        producto.save()
+        
+    return redirect("cart")    
+
+
+def devolvercarrito(request):
+    items_carrito = Cart.objects.filter(usuario=request.user)
+    
+    # Devolver la cantidad de productos al stock disponible
+    for item in items_carrito:
+        Producto.objects.filter(id=item.producto.id).update(stock=F('stock') + item.cantidad)
+    
+    # Eliminar todos los productos del carrito
+    items_carrito.delete()
+    
+    return redirect('cart')
+
+
+def eliminarcarrito(request, id):
+    carrito = Cart(request)
+    producto = Producto.objects.get(id=id)
+    carrito.restar(producto)
+    return redirect("cart")
+
+
+
+def eliminar_producto(request, id):
+    producto = Producto.objects.get(id=id)
+    Cart.objects.filter(producto=producto, usuario=request.user).delete()
+    return redirect("cart")
+
+
+def agregaralcarrito(request, id):
+    producto = Producto.objects.get(id=id)
+    
+    # Verificar si el stock es cero
+    if producto.stock == 0:
+        messages.error(request, 'Hay un producto agotado en tu carrito.')
+    else:
+        item_carrito, created = Cart.objects.get_or_create(
+            producto=producto,
+            usuario=request.user,
+            defaults={'cantidad': 1}
+        )
+        if not created:
+            item_carrito.cantidad += 1
+            item_carrito.save()
+        
+        # Restar la cantidad del producto al stock disponible
+        Producto.objects.filter(id=id).update(stock=F('stock') - 1)
+        
+    total_precio = Cart.objects.filter(usuario=request.user).aggregate(Sum('producto__precio'))
+    request.session['total_precio'] = total_precio.get('producto__precio__sum', 0)
+    
+    return redirect('cart')
+
+
+def restar_producto(request, id):
+    item_carrito = Cart.objects.get(producto__id=id, usuario=request.user)
+    
+    if item_carrito.cantidad > 1:
+        item_carrito.cantidad -= 1
+        Producto.objects.filter(id=item_carrito.producto.id).update(stock=F('stock') + 1)
+        item_carrito.save()
+    else:
+        # Devolver la cantidad del producto al stock disponible
+        Producto.objects.filter(id=item_carrito.producto.id).update(stock=F('stock') + 1)
+        item_carrito.delete()
+
+    return redirect("cart")
+
+
+def limpiar_carrito(request):
+    Cart.objects.filter(usuario=request.user).delete()
+    request.session['total_precio'] = 0
+    return redirect("cart")
+
 

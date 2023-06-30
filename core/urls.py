@@ -25,6 +25,7 @@ urlpatterns = [
     path('register/', register, name="register" ),
     path('seguimiento/', seguimiento, name="seguimiento"),
     path('shop/', shop, name="shop"),
+    path('suscripcion/', suscripcion, name="suscripcion"),
 
 
 
