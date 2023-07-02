@@ -25,6 +25,7 @@
 							<tr class="text-center">
 								<th>&nbsp;</th>
 								<th>&nbsp;</th>
+<<<<<<< HEAD
 								<th>Imagen</th>
 								<th>Producto</th>
 								<th>Cantidad</th>
@@ -45,12 +46,33 @@
 										height="100">
 									{% else %}
 									<img src="{{ carrito.producto.foto.url }}" class="img-fluid" width="100"
+=======
+								<th>Producto</th>
+								<th>Precio</th>
+								<th>Cantidad</th>
+								<th>Total</th>
+							</tr>
+						</thead>
+
+						{% for carrito in carrito %}
+						<tbody>
+							<tr class="text-center">
+								<td class="product-remove"><a href="#"><span class="ion-ios-close"></span></a></td>
+
+								<td class="image-prod">
+									{% if item_carrito.producto.foto %}
+									<img src="{{ carrito.producto.foto.url }}" class="img-fluid" width="100"
+										height="100">
+									{% else %}
+									<img src="{% static 'core/images/carrito.dfault.jpg' %}" class="img-fluid" width="100"
+>>>>>>> 0a88cb75c4289fd8e6f78810bb90efb066d96992
 										height="100">
 									{% endif %}
 								</td>
 
 								<td class="product-name">
 									<h3>{{ carrito.producto.nombre }}</h3>
+<<<<<<< HEAD
 									<p>{{ descripcion.}}</p>
 								</td>
 								<td class="quantity">
@@ -73,6 +95,30 @@
 		
 					</table>
 
+=======
+									<p>Far far away, behind the word mountains, far from the countries</p>
+								</td>
+
+								<td class="price">${{ carrito.producto.precio }}</td>
+
+								<td class="quantity">
+									<div class="col">
+										<a href="{% url 'Sub' carrito.producto_id %}"
+											class="badge btn btn-dark badge-dark">-</a>
+									</div>
+									{{ carrito.cantidad }}
+									<div class="col">
+										<a href="{% url 'Add' carrito.producto_id %}"
+											class="badge btn btn-dark badge-dark" style="margin-right: 30px;">+</a>
+									</div>
+								</td>
+
+								<td class="total">${{ precio_total }}</td>
+							</tr><!-- END TR-->
+						{% endfor %}
+						</tbody>
+					</table>
+>>>>>>> 0a88cb75c4289fd8e6f78810bb90efb066d96992
 				</div>
 			</div>
 		</div>
@@ -116,7 +162,11 @@
 {% endblock %}
 
 {% block js %}
+<<<<<<< HEAD
 
+=======
+<script src="shttps://kit.fontawesome.com/7043d27387.js' " crossorigin="anonymous"></script>
+>>>>>>> 0a88cb75c4289fd8e6f78810bb90efb066d96992
 <script src="http://www.paypalobjects.com/api/checkout.js"></script>
 <script>
 	paypal.Button.render({
@@ -145,6 +195,10 @@
 		},
 		onAuthorize: function (data, actions) {
 			return actions.payment.execute().then(function () {
+<<<<<<< HEAD
+=======
+				// LOGICA DESPUES DEL PAGO
+>>>>>>> 0a88cb75c4289fd8e6f78810bb90efb066d96992
 				Swal.fire({
 					title: 'Pago Exitoso',
 					text: 'Pago realizado correctamente!',

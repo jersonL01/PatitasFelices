@@ -21,7 +21,11 @@ urlpatterns = [
     path('contact/', contact, name="contact" ),
     path('productsingle/', productsingle, name="productsingle" ),
     path('shopAdmin/', shopAdmin, name="shopAdmin" ),
+<<<<<<< HEAD
     path('UniversoApi/', UniversoApi, name="UniversoApi" ),
+=======
+    path('shopApi/', shopApi, name="shopApi" ),
+>>>>>>> 0a88cb75c4289fd8e6f78810bb90efb066d96992
     path('register/', register, name="register" ),
     path('seguimiento/', seguimiento, name="seguimiento"),
     path('shop/', shop, name="shop"),

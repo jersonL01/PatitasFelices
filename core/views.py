@@ -15,9 +15,12 @@ from django.contrib.auth.models import Group
 from django.db.models import Sum, F , Q
 from .carrito import *
 from django.shortcuts import render,redirect,get_object_or_404
+<<<<<<< HEAD
 from django.db.models import F, ExpressionWrapper, DecimalField
 from django.contrib.auth import authenticate, login
 
+=======
+>>>>>>> 0a88cb75c4289fd8e6f78810bb90efb066d96992
 
 
 
@@ -50,6 +53,38 @@ def index(request):
 def about(request):
     return render(request, 'core/about.html')
 
+<<<<<<< HEAD
+=======
+def cart(request):
+
+    productos = Producto.objects.all()
+
+    return render(request, 'core/cart.html')
+
+    # LOGICA DEL CARRITO, SE SUMAN TODOS LOS PRECIOS
+    """
+    respuesta = requests.get('https://mindicador.cl/api/dolar').json()
+    valor_usd = respuesta['serie'][0]['valor']
+
+    items_carrito = Carrito.objects.filter(usuario=request.user)
+    cantidad_total = items_carrito.aggregate(total_cantidad=Sum('cantidad'))
+    cantidad_seleccionada = request.GET.get('cantidad')
+    
+    
+    precio_total = items_carrito.annotate(precio_total=F('producto__precio') * F('cantidad')).aggregate(total_precio=Sum('precio_total'))
+    if precio_total['total_precio'] is not None and valor_usd != 0:
+        precio_total = round(precio_total['total_precio'] / valor_usd,2)
+    else:
+        precio_total = 0
+    
+    return render(request, 'core/cart.html', {
+        'items_carrito': items_carrito,
+        'cantidad_total': cantidad_total['total_cantidad'],
+        'precio_total': precio_total,
+        'cantidad_seleccionada': cantidad_seleccionada,
+    })"""
+
+>>>>>>> 0a88cb75c4289fd8e6f78810bb90efb066d96992
 
 def checkout(request):
     return render(request, 'core/checkout.html')
@@ -77,7 +112,9 @@ def shop(request):
     }
 
     return render(request, 'core/shop.html',data)
+def register(request):
 
+<<<<<<< HEAD
 def register(request):
     
     data ={
@@ -96,11 +133,15 @@ def register(request):
         data ["form"] = formulario
 
     return render(request, 'registration/register.html', data)
+=======
+    return render(request, 'registration/register.html')
+>>>>>>> 0a88cb75c4289fd8e6f78810bb90efb066d96992
        
 
 def seguimiento(request):
     return render(request, 'core/seguimiento.html')
 
+<<<<<<< HEAD
 
 def suscripcion(request):
     return render(request, 'core/suscripcion.html')
@@ -245,6 +286,12 @@ def limpiar_carrito(request):
 
 # SHOP API
 def UniversoApi(request):
+=======
+def suscripcion(request):
+    return render(request, 'core/suscripcion.html')
+# SHOP API
+def shopApi(request):
+>>>>>>> 0a88cb75c4289fd8e6f78810bb90efb066d96992
     # REALIZAMOS LA SOLICITUD AL API
     respuesta = requests.get('http://127.0.0.1:8000/api/productos/')
     respuesta2 = requests.get('https://mindicador.cl/api/')
@@ -310,3 +357,115 @@ def eliminar(request, id):
 
     return redirect( to="shop")
 
+<<<<<<< HEAD
+=======
+# CARRITO
+
+def agregaralcarrito(request, id):
+    producto = Producto.objects.get(id=id)
+    
+    # Verificar si el stock es cero
+    if producto.stock == 0:
+        messages.error(request, 'Hay un producto agotado en tu carrito.')
+    else:
+        item_carrito, created = Cart.objects.get_or_create(
+            producto=producto,
+            usuario=request.user,
+            defaults={'cantidad': 1}
+        )
+        if not created:
+            item_carrito.cantidad += 1
+            item_carrito.save()
+        
+        # Restar la cantidad del producto al stock disponible
+        Producto.objects.filter(id=id).update(stock=F('stock') - 1)
+        
+    total_precio = Cart.objects.filter(usuario=request.user).aggregate(Sum('producto__precio'))
+    request.session['total_precio'] = total_precio.get('producto__precio__sum', 0)
+    
+    return redirect('cart')
+
+def comprar_producto(request, id):
+    producto = get_object_or_404(Producto, id=id)
+    
+    if producto.stock > 0:
+        producto.stock -= 1
+        producto.save()
+        
+    return redirect("cart")    
+
+
+def devolvercarrito(request):
+    items_carrito = Cart.objects.filter(usuario=request.user)
+    
+    # Devolver la cantidad de productos al stock disponible
+    for item in items_carrito:
+        Producto.objects.filter(id=item.producto.id).update(stock=F('stock') + item.cantidad)
+    
+    # Eliminar todos los productos del carrito
+    items_carrito.delete()
+    
+    return redirect('cart')
+
+
+def eliminarcarrito(request, id):
+    carrito = Cart(request)
+    producto = Producto.objects.get(id=id)
+    carrito.restar(producto)
+    return redirect("cart")
+
+
+
+def eliminar_producto(request, id):
+    producto = Producto.objects.get(id=id)
+    Cart.objects.filter(producto=producto, usuario=request.user).delete()
+    return redirect("cart")
+
+
+def agregaralcarrito(request, id):
+    producto = Producto.objects.get(id=id)
+    
+    # Verificar si el stock es cero
+    if producto.stock == 0:
+        messages.error(request, 'Hay un producto agotado en tu carrito.')
+    else:
+        item_carrito, created = Cart.objects.get_or_create(
+            producto=producto,
+            usuario=request.user,
+            defaults={'cantidad': 1}
+        )
+        if not created:
+            item_carrito.cantidad += 1
+            item_carrito.save()
+        
+        # Restar la cantidad del producto al stock disponible
+        Producto.objects.filter(id=id).update(stock=F('stock') - 1)
+        
+    total_precio = Cart.objects.filter(usuario=request.user).aggregate(Sum('producto__precio'))
+    request.session['total_precio'] = total_precio.get('producto__precio__sum', 0)
+    
+    return redirect('cart')
+
+
+def restar_producto(request, id):
+    item_carrito = Cart.objects.get(producto__id=id, usuario=request.user)
+    
+    if item_carrito.cantidad > 1:
+        item_carrito.cantidad -= 1
+        Producto.objects.filter(id=item_carrito.producto.id).update(stock=F('stock') + 1)
+        item_carrito.save()
+    else:
+        # Devolver la cantidad del producto al stock disponible
+        Producto.objects.filter(id=item_carrito.producto.id).update(stock=F('stock') + 1)
+        item_carrito.delete()
+
+    return redirect("cart")
+
+
+def limpiar_carrito(request):
+    Cart.objects.filter(usuario=request.user).delete()
+    request.session['total_precio'] = 0
+    return redirect("cart")
+
+
+>>>>>>> 0a88cb75c4289fd8e6f78810bb90efb066d96992
