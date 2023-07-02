@@ -16,6 +16,7 @@ from django.db.models import Sum, F , Q
 from .carrito import *
 from django.shortcuts import render,redirect,get_object_or_404
 from django.db.models import F, ExpressionWrapper, DecimalField
+from django.contrib.auth import authenticate, login
 
 
 
@@ -76,9 +77,25 @@ def shop(request):
     }
 
     return render(request, 'core/shop.html',data)
-def register(request):
 
-    return render(request, 'registration/register.html')
+def register(request):
+    
+    data ={
+        'form' : RegistroUsuarioForm()
+    }
+    
+    if request.method == 'POST':
+        formulario = RegistroUsuarioForm(data = request.POST)
+        if formulario.is_valid():
+            formulario.save()
+            #user = authenticate(username=formulario.cleaned_data["username"], password = formulario.cleaned_data["password1"])
+            #login(request, user)
+            messages.success(request, "Te has registrado correctamente")
+            
+            return redirect(to="index")
+        data ["form"] = formulario
+
+    return render(request, 'registration/register.html', data)
        
 
 def seguimiento(request):
@@ -227,7 +244,7 @@ def limpiar_carrito(request):
     return redirect("cart")
 
 # SHOP API
-def shopApi(request):
+def UniversoApi(request):
     # REALIZAMOS LA SOLICITUD AL API
     respuesta = requests.get('http://127.0.0.1:8000/api/productos/')
     respuesta2 = requests.get('https://mindicador.cl/api/')
@@ -250,7 +267,7 @@ def shopApi(request):
         'digimon' : digimon,
     }
 
-    return render(request, 'core/shopApi.html',data)
+    return render(request, 'core/UniversoApi.html',data)
 
 
 #CRUD

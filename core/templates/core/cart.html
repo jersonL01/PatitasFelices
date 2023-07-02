@@ -32,13 +32,13 @@
 								<th>Total</th>
 							</tr>
 						</thead>
-
+				
 						{% for carrito in items_carrito %}
 						<tbody>
 							<tr class="text-center">
-								
-								<td class="product-remove"><a href="{% url 'Sub' carrito.producto_id %}"><span class="ion-ios-close"></span></a></td>
-								<td class="product-remove"><a href="{% url 'Add' carrito.producto_id %}"><span class="fa-solid fa-plus">+</span></a></td>
+
+								<td class="product-remove"><a href="{% url 'Sub' carrito.producto_id %}"><span>-</span></a></td>
+								<td class="product-remove"><a href="{% url 'Add' carrito.producto_id %}"><span >+</span></a></td>
 								<td class="image-prod">
 									{% if carrito.producto.foto %}
 									<img src="{% static 'core/images/carrito.dfault' %}" class="img-fluid" width="100"
@@ -63,13 +63,16 @@
 
 								<td class="price">${{ carrito.producto.precio }}</td>
 
-							
-
 								<td class="total">${{ precio_total }}</td>
-							</tr><!-- END TR-->
+								
+
+							</tr>
+				
 							{% endfor %}
 						</tbody>
+		
 					</table>
+
 				</div>
 			</div>
 		</div>
